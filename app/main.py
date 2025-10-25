@@ -4,7 +4,7 @@ import pandas as pd
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-lm = loaded_model = pickle.load(open('model/model_1.pickle', 'rb'))
+lm = loaded_model = pickle.load(open('app/model_1.pickle', 'rb'))
 
 class Data(BaseModel):
     attacking_heading_accuracy: int
