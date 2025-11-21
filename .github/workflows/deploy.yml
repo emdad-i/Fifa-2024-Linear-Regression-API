@@ -18,6 +18,7 @@ jobs:
                 host: ${{ secrets.VM_HOST }}
                 username: ${{ secrets.VM_USERNAME }}
                 key: ${{ secrets.SSH_PRIVATE_KEY }}
+                port: 50011
                 script: |
                     set -e
                     cd /home/ubuntu/Fifa-2024-Linear-Regression-API
@@ -31,7 +32,7 @@ jobs:
                     podman rm fifa || true
                     
                     # Run new container
-                    podman run -d --name fifa -p 8080:8080 --restart unless-stopped fifa:latest
+                    podman run -d --name fifa -p 8000:8000 --restart unless-stopped fifa:latest
                     
                     # Clean up old images
                     podman image prune -f
