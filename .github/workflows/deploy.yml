@@ -1,0 +1,40 @@
+name: Deploy to VM
+
+on: 
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy-via-ssh:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            
+            - name: SSH into VM and deploy
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.VM_HOST }}
+                username: ${{ secrets.VM_USERNAME }}
+                key: ${{ secrets.SSH_PRIVATE_KEY }}
+                script: |
+                    set -e
+                    cd /home/ubuntu/Fifa-2024-Linear-Regression-API
+                    git pull origin main
+                    
+                    # Build new image
+                    podman build -t fifa:latest .
+                    
+                    # Stop and remove old container
+                    podman stop fifa || true
+                    podman rm fifa || true
+                    
+                    # Run new container
+                    podman run -d --name fifa -p 8080:8080 --restart unless-stopped fifa:latest
+                    
+                    # Clean up old images
+                    podman image prune -f
+                    
+                    echo "Deployment completed successfully!"
+              
