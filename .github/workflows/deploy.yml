@@ -16,7 +16,7 @@ jobs:
               uses: appleboy/ssh-action@master
               with:
                 host: ${{ secrets.VM_HOST }}
-                username: ${{ secrets.VM_USERNAME }}
+                username: ubuntu
                 key: ${{ secrets.SSH_PRIVATE_KEY }}
                 port: 50011
                 script: |
